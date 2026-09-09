@@ -442,7 +442,7 @@
                 </div>
                 <div class="form-group">
                     <label>Repository Name</label>
-                    <input type="text" id="githubRepo" placeholder="my-website">
+                    <input type="text" id="githubRepo" placeholder="ripleys-brochure">
                 </div>
                 <div class="form-group">
                     <label>Personal Access Token (PAT)</label>
@@ -2617,7 +2617,7 @@ Object.assign(translations.ar, {
         }
 
         function loadGithubConfig() {
-            const config = JSON.parse(localStorage.getItem('githubConfig')) || { username: 'ananpipatponwirit-creator', repo: 'ripleys-brochure', token: '', branch: 'main' }; branch: 'main' };
+            const config = JSON.parse(localStorage.getItem('githubConfig')) || { username: 'ananpipatponwirit-creator', repo: 'ripleys-brochure', token: '', branch: 'main' };
             document.getElementById('githubUsername').value = config.username;
             document.getElementById('githubRepo').value = config.repo;
             document.getElementById('githubToken').value = config.token;
