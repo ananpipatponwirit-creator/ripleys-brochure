@@ -176,7 +176,6 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
@@ -308,28 +307,17 @@
         <div class="info-box">
             <h2><i class="fas fa-gift"></i> <span data-i18n="coupon_get">วิธีการรับคูปอง</span></h2>
             <p data-i18n="coupon_desc">ร่วมกิจกรรมสุดมันส์เพื่อรับคูปองส่วนลดทันที!</p>
-            <div class="coupon-cards-wrapper" style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px;">
-    <div class="coupon-card" style="border-top:5px solid #00CED1; background:white; border-radius:15px; padding:20px; box-shadow:0 5px 20px rgba(0,0,0,0.15);">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-            <div class="card-icon" style="background:#00CED1; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.3em; flex-shrink:0;"><i class="fas fa-bullseye"></i></div>
-            <div>
-                <h3 data-i18n="coupon_laser_title" style="margin:0; font-size:1.1em; color:var(--dark);">Games Laser Mission</h3>
-                <p data-i18n="coupon_laser" style="margin:0; font-size:0.85em; color:#666;">รับส่วนลด 10% สำหรับอาหารและเครื่องดื่ม</p>
-            </div>
-        </div>
-        <img id="couponLaserImg" src="" alt="คูปองส่วนลด 10%" style="width:100%; border-radius:10px; border:2px dashed #00CED1; display:none; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-    <div class="coupon-card" style="border-top:5px solid #4B0082; background:white; border-radius:15px; padding:20px; box-shadow:0 5px 20px rgba(0,0,0,0.15);">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-            <div class="card-icon" style="background:#4B0082; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.3em; flex-shrink:0;"><i class="fas fa-ghost"></i></div>
-            <div>
-                <h3 data-i18n="coupon_scream_title" style="margin:0; font-size:1.1em; color:var(--dark);">Scream in the Dark</h3>
-                <p data-i18n="coupon_scream" style="margin:0; font-size:0.85em; color:#666;">รับส่วนลด 15% สำหรับอาหารและเครื่องดื่ม</p>
-            </div>
-        </div>
-        <img id="couponScreamImg" src="" alt="คูปองส่วนลด 15%" style="width:100%; border-radius:10px; border:2px dashed #4B0082; display:none; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-</div>
+            <div class="grid" style="margin-top: 20px;">
+                <div class="card" style="border-top-color: #00CED1;">
+                    <div class="card-icon" style="background: #00CED1;"><i class="fas fa-bullseye"></i></div>
+                    <h3 data-i18n="coupon_laser_title">Games Laser Mission</h3>
+                    <p data-i18n="coupon_laser">รับส่วนลด 10% สำหรับอาหารและเครื่องดื่ม</p>
+                </div>
+                <div class="card" style="border-top-color: #4B0082;">
+                    <div class="card-icon" style="background: #4B0082;"><i class="fas fa-ghost"></i></div>
+                    <h3 data-i18n="coupon_scream_title">Scream in the Dark</h3>
+                    <p data-i18n="coupon_scream">รับส่วนลด 15% สำหรับอาหารและเครื่องดื่ม</p>
+                </div>
             </div>
         </div>
         <div class="info-box">
@@ -484,20 +472,7 @@
                 <h3><i class="fas fa-ticket-alt"></i> จัดการหน้าคูปอง</h3>
                 <div id="couponLangNote" class="lang-editing-note"></div>
                 <div id="couponEditor"></div>
-<div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--primary);">
-    <h4 style="color:var(--dark); margin-bottom:15px;"><i class="fas fa-image"></i> รูปภาพคูปองส่วนลด (แนวนอน)</h4>
-    <div class="form-group">
-        <label>รูปคูปอง Games Laser Mission (10%)</label>
-        <input type="text" id="editCouponLaserImg" placeholder="https://example.com/coupon-laser.png" onchange="updateCouponImage('laser', this.value)">
-        <img id="previewCouponLaser" src="" style="max-width:100%; max-height:200px; margin-top:10px; border-radius:10px; border:2px dashed #00CED1; display:none; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-    <div class="form-group">
-        <label>รูปคูปอง Scream in the Dark (15%)</label>
-        <input type="text" id="editCouponScreamImg" placeholder="https://example.com/coupon-scream.png" onchange="updateCouponImage('scream', this.value)">
-        <img id="previewCouponScream" src="" style="max-width:100%; max-height:200px; margin-top:10px; border-radius:10px; border:2px dashed #4B0082; display:none; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-</div>
-<button class="btn" onclick="saveAllChanges()" style="margin-top: 20px;">
+                <button class="btn" onclick="saveAllChanges()" style="margin-top: 20px;">
                     <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลงทั้งหมดไปยัง GitHub
                 </button>
             </div>
@@ -2270,10 +2245,6 @@ Object.assign(translations.ar, {
                               }
                     ]
           },
-"couponImages": {
-                    "laser": "coupon-laser-10percent.png",
-                    "scream": "coupon-scream-15percent.png"
-          },
           "menu": {
                     "snacks": [
                               {
@@ -2557,7 +2528,9 @@ Object.assign(translations.ar, {
                     <span class="single-price-val">${a.price.toLocaleString()} ${t.baht || 'Baht'}</span>
                 </div>
             `).join('') + `<div style="text-align:center;"><span class="terms-again-link" onclick="showTermsAgain()"><i class="fas fa-file-contract"></i> ${t.terms_again || ''}</span></div>`;
-        }        function renderMenu() {
+        }
+
+        function renderMenu() {
             const t = translations[currentLang] || translations['en'];
             
             const renderItem = item => `
@@ -2590,7 +2563,6 @@ Object.assign(translations.ar, {
             document.getElementById('navContainer').classList.remove('open');
             if (id === 'menu') renderMenu();
             if (id === 'home') renderAttractions();
-                        if (id === 'coupon') renderCouponImages();
         }
 
         function toggleNav() {
@@ -2625,7 +2597,6 @@ Object.assign(translations.ar, {
             event.target.classList.add('active');
             if (tab === 'attractions') renderAttractionsEditor();
             if (tab === 'coupon') renderCouponEditor();
-                       loadCouponImagesToEditor(); 
         }
 
         function loadGithubConfig() {
@@ -2848,7 +2819,9 @@ Object.assign(translations.ar, {
                 siteData.menu[category].splice(index, 1);
                 renderMenuEditor();
             }
-        }        function renderCouponEditor() {
+        }
+
+        function renderCouponEditor() {
             const langNames = { th: 'ไทย', en: 'English', zh: '中文', ru: 'Русский', hi: 'हिन्दी', he: 'עברית', ja: '日本語', ko: '한국어', ar: 'العربية' };
             const t = translations[currentLang] || translations['en'];
             const fields = [
@@ -2897,7 +2870,9 @@ Object.assign(translations.ar, {
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 if (el.getAttribute('data-i18n') === key && t[key]) el.innerHTML = t[key];
             });
-        }        function renderContentEditor() {
+        }
+
+        function renderContentEditor() {
             const container = document.getElementById('contentEditor');
             const t = translations[currentLang] || translations['en'];
             container.innerHTML = `
@@ -2988,75 +2963,7 @@ Object.assign(translations.ar, {
         console.error(error);
     }
 }
-// เพิ่มโครงสร้าง couponImages ใน siteData (ถ้ายังไม่มี)
-if (!siteData.couponImages) {
-    siteData.couponImages = {
-        laser: "",
-        scream: ""
-    };
-}
 
-// ฟังก์ชันแสดงภาพคูปองในหน้า coupon
-function renderCouponImages() {
-    if (!siteData.couponImages) return;
-    
-    const laserImg = document.getElementById('couponLaserImg');
-    const screamImg = document.getElementById('couponScreamImg');
-    
-    if (laserImg && siteData.couponImages.laser) {
-        laserImg.src = siteData.couponImages.laser;
-        laserImg.style.display = 'block';
-    }
-    
-    if (screamImg && siteData.couponImages.scream) {
-        screamImg.src = siteData.couponImages.scream;
-        screamImg.style.display = 'block';
-    }
-}
-
-// อัปเดตภาพคูปอง
-function updateCouponImage(type, url) {
-    if (!siteData.couponImages) siteData.couponImages = {};
-    siteData.couponImages[type] = url;
-    
-    // อัปเดต preview ในหน้า admin
-    const previewId = type === 'laser' ? 'previewCouponLaser' : 'previewCouponScream';
-    const previewEl = document.getElementById(previewId);
-    if (previewEl) {
-        if (url) {
-            previewEl.src = url;
-            previewEl.style.display = 'block';
-        } else {
-            previewEl.style.display = 'none';
-        }
-    }
-    
-    // อัปเดตหน้า coupon
-    renderCouponImages();
-}
-
-// โหลดภาพคูปองไปยัง Editor
-function loadCouponImagesToEditor() {
-    if (!siteData.couponImages) siteData.couponImages = {};
-    
-    const laserInput = document.getElementById('editCouponLaserImg');
-    const screamInput = document.getElementById('editCouponScreamImg');
-    const laserPreview = document.getElementById('previewCouponLaser');
-    const screamPreview = document.getElementById('previewCouponScream');
-    
-    if (laserInput) laserInput.value = siteData.couponImages.laser || '';
-    if (screamInput) screamInput.value = siteData.couponImages.scream || '';
-    
-    if (laserPreview && siteData.couponImages.laser) {
-        laserPreview.src = siteData.couponImages.laser;
-        laserPreview.style.display = 'block';
-    }
-    
-    if (screamPreview && siteData.couponImages.scream) {
-        screamPreview.src = siteData.couponImages.scream;
-        screamPreview.style.display = 'block';
-    }
-}
         window.onload = () => {
             changeLang(currentLang);
         };
