@@ -438,7 +438,8 @@
                 <p style="margin-bottom: 15px;">กรอกข้อมูล GitHub ของคุณเพื่อแก้ไขไฟล์โดยตรง:</p>
                 <div class="form-group">
                     <label>GitHub Username</label>
-                    <input type="text" id="githubUsername" placeholder="joenita589-afk">
+                    <input type="text" id="githubUsername" placeholder="
+ananpipatponwirit-creator">
                 </div>
                 <div class="form-group">
                     <label>Repository Name</label>
@@ -2617,7 +2618,8 @@ Object.assign(translations.ar, {
         }
 
         function loadGithubConfig() {
-            const config = JSON.parse(localStorage.getItem('githubConfig')) || { username: 'joenita589-afk', repo: 'my-website', token: '', branch: 'main' };
+            const config = JSON.parse(localStorage.getItem('githubConfig')) || { username: '
+ananpipatponwirit-creator', repo: 'my-website', token: '', branch: 'main' };
             document.getElementById('githubUsername').value = config.username;
             document.getElementById('githubRepo').value = config.repo;
             document.getElementById('githubToken').value = config.token;
