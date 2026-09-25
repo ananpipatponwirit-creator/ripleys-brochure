@@ -2406,24 +2406,40 @@
             `).join('') + `<div style="text-align:center;"><span class="terms-again-link" onclick="showTermsAgain()"><i class="fas fa-file-contract"></i> ${t.terms_again || ''}</span></div>`;
         }
 
-        function renderMenu() {
-            const t = translations[currentLang] || translations['en'];
-            
-            const renderItem = item => `
-                <div class="menu-item-card">
-                    <div class="img-wrap">
-                        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : '<div style="height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#999;"><i class="fas fa-image" style="font-size:3em;"></i></div>'}
-                        <div class="menu-price-badge">${item.price} ${t.baht || 'Baht'}</div>
-                    </div>
-                    <div class="menu-item-info">
-                        <h4>${item.name}</h4>
-                        <p>${currentLang === 'th' ? item.nameTh : item.name}</p>
-                    </div>
-                </div>
-            `;
-            document.getElementById('snacksGrid').innerHTML = siteData.menu.snacks.map(renderItem).join('');
-            document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(renderItem).join('');
-        }
+       function renderMenu() {
+const t = translations[currentLang] || translations['en'];
+
+// ฟังก์ชันช่วยดึงชื่อตามภาษา
+const getNameByLang = (item, lang) => {
+  const nameMap = {
+    'th': 'nameTh',
+    'zh': 'nameZh',
+    'hi': 'nameHi',
+    'ru': 'nameRu',
+    'ar': 'nameAr',
+    'he': 'nameHe',
+    'ja': 'nameJa',
+    'ko': 'nameKo'
+  };
+  const fieldName = nameMap[lang];
+  return (fieldName && item[fieldName]) ? item[fieldName] : item.name;
+};
+
+const renderItem = item => `
+<div class="menu-item-card">
+<div class="img-wrap">
+${item.image ? `<img src="${item.image}" alt="${item.name}">` : '<div style="height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#999;"><i class="fas fa-image" style="font-size:3em;"></i></div>'}
+<div class="menu-price-badge">${item.price} ${t.baht || 'Baht'}</div>
+</div>
+<div class="menu-item-info">
+<h4>${getNameByLang(item, currentLang)}</h4>
+<p>${item.name}</p>
+</div>
+</div>
+`;
+document.getElementById('snacksGrid').innerHTML = siteData.menu.snacks.map(renderItem).join('');
+document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(renderItem).join('');
+}
 
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
