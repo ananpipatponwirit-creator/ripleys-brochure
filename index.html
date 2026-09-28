@@ -3008,5 +3008,117 @@ document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(rende
 })();
 </script>
 <!-- ===== END TTS ADD-ON ===== -->
+    <!-- ===== SHARE ADD-ON: วางบล็อกนี้ก่อน </body> (ต่อจาก <script> หลักของหน้า) ===== -->
+<style>
+.share-box { max-width: 420px; text-align: center; }
+.share-box h2 { margin-bottom: 6px; }
+.share-box .share-desc { color: #777; margin-bottom: 16px; font-size: 0.95em; }
+.share-qr { width: 220px; height: 220px; max-width: 100%; background: #fff; padding: 8px; border: 2px solid #eee; border-radius: 12px; margin: 0 auto 16px; display: block; }
+.share-link-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 0.9em; margin-bottom: 10px; color: #333; background: #f8f9fa; }
+.share-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.share-actions .btn { margin: 0; flex: 1 1 130px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.95em; }
+.btn-line { background: #06c755; }
+.btn-line:hover { background: #05a847; }
+.btn-fb { background: #1877f2; }
+.btn-fb:hover { background: #1462c7; }
+</style>
+<script>
+(function () {
+  const labels = {
+    th:{ nav:'แชร์', title:'แชร์เว็บไซต์นี้', desc:'สแกน QR โค้ด หรือคัดลอกลิงก์เพื่อแชร์ให้เพื่อน', copy:'คัดลอกลิงก์', copied:'คัดลอกแล้ว!', share:'แชร์ผ่านแอป' },
+    en:{ nav:'Share', title:'Share this website', desc:'Scan the QR code or copy the link to share with friends', copy:'Copy link', copied:'Copied!', share:'Share via app' },
+    zh:{ nav:'分享', title:'分享此网站', desc:'扫描二维码或复制链接分享给朋友', copy:'复制链接', copied:'已复制！', share:'通过应用分享' },
+    ru:{ nav:'Поделиться', title:'Поделиться сайтом', desc:'Отсканируйте QR-код или скопируйте ссылку, чтобы поделиться с друзьями', copy:'Скопировать ссылку', copied:'Скопировано!', share:'Поделиться в приложении' },
+    hi:{ nav:'साझा करें', title:'इस वेबसाइट को साझा करें', desc:'QR कोड स्कैन करें या लिंक कॉपी करके दोस्तों के साथ साझा करें', copy:'लिंक कॉपी करें', copied:'कॉपी हो गया!', share:'ऐप से साझा करें' },
+    he:{ nav:'שיתוף', title:'שתפו את האתר', desc:'סרקו את קוד ה-QR או העתיקו את הקישור כדי לשתף עם חברים', copy:'העתקת קישור', copied:'הועתק!', share:'שיתוף באפליקציה' },
+    ja:{ nav:'共有', title:'このサイトを共有', desc:'QRコードを読み取るか、リンクをコピーして友達に共有しましょう', copy:'リンクをコピー', copied:'コピーしました！', share:'アプリで共有' },
+    ko:{ nav:'공유', title:'이 웹사이트 공유', desc:'QR 코드를 스캔하거나 링크를 복사해 친구에게 공유하세요', copy:'링크 복사', copied:'복사됨!', share:'앱으로 공유' },
+    ar:{ nav:'مشاركة', title:'شارك هذا الموقع', desc:'امسح رمز QR أو انسخ الرابط لمشاركته مع الأصدقاء', copy:'نسخ الرابط', copied:'تم النسخ!', share:'مشاركة عبر التطبيق' }
+  };
+  const L = () => labels[currentLang] || labels.en;
+  const $ = id => document.getElementById(id);
+  const pageUrl = () => (location.origin && location.origin !== 'null') ? location.origin + location.pathname : location.href;
+
+  // ปุ่มในเมนู (แทรกก่อนปุ่ม Admin)
+  const nav = $('navContainer');
+  const btn = document.createElement('button');
+  btn.className = 'nav-btn';
+  btn.innerHTML = '<i class="fas fa-share-alt"></i> <span id="shareNavLabel"></span>';
+  btn.onclick = openShare;
+  nav.insertBefore(btn, nav.lastElementChild);
+
+  // หน้าต่างแชร์
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'shareModal';
+  overlay.innerHTML = `
+    <div class="modal-box share-box">
+      <button class="modal-close" id="shareClose" aria-label="Close"><i class="fas fa-times"></i></button>
+      <h2 id="shareTitle"></h2>
+      <p class="share-desc" id="shareDesc"></p>
+      <img class="share-qr" id="shareQr" alt="QR Code">
+      <input class="share-link-input" id="shareLink" readonly>
+      <div class="share-actions">
+        <button class="btn btn-success" id="shareCopy"><i class="fas fa-copy"></i> <span id="shareCopyLabel"></span></button>
+        <button class="btn btn-secondary" id="shareNative" style="display:none"><i class="fas fa-share-alt"></i> <span id="shareNativeLabel"></span></button>
+        <a class="btn btn-line" id="shareLine" target="_blank" rel="noopener"><i class="fas fa-comment"></i> LINE</a>
+        <a class="btn btn-fb" id="shareFb" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i> Facebook</a>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  function applyLabels() {
+    const t = L();
+    $('shareNavLabel').textContent = t.nav;
+    $('shareTitle').textContent = t.title;
+    $('shareDesc').textContent = t.desc;
+    $('shareCopyLabel').textContent = t.copy;
+    $('shareNativeLabel').textContent = t.share;
+  }
+
+  function openShare() {
+    const url = pageUrl();
+    $('shareQr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=440x440&margin=0&data=' + encodeURIComponent(url);
+    $('shareLink').value = url;
+    $('shareLine').href = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(url);
+    $('shareFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    $('shareNative').style.display = navigator.share ? 'inline-flex' : 'none';
+    applyLabels();
+    $('navContainer').classList.remove('open');
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeShare() {
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  $('shareClose').onclick = closeShare;
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeShare(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeShare(); });
+
+  $('shareCopy').onclick = () => {
+    const input = $('shareLink');
+    const done = () => {
+      const lb = $('shareCopyLabel');
+      lb.textContent = L().copied;
+      setTimeout(() => { lb.textContent = L().copy; }, 2000);
+    };
+    const fallback = () => { input.select(); input.setSelectionRange(0, 99999); try { document.execCommand('copy'); } catch (e) {} done(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(input.value).then(done, fallback);
+    else fallback();
+  };
+
+  $('shareNative').onclick = () => {
+    if (navigator.share) navigator.share({ title: document.title, url: pageUrl() }).catch(() => {});
+  };
+
+  // อัปเดตข้อความเมื่อเปลี่ยนภาษา
+  const _lang = window.changeLang;
+  window.changeLang = function (l) { _lang(l); applyLabels(); };
+  applyLabels();
+})();
+</script>
+<!-- ===== END SHARE ADD-ON ===== -->
 </body>
 </html>
