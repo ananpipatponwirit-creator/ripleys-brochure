@@ -193,16 +193,16 @@
     <div class="top-bar">
     <div class="lang-select">
         <select id="langSelect" onchange="changeLang(this.value)">
-            <option value="th">🇹🇭 ไทย</option>
-            <option value="en">🇬 English</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ru">🇷 Русский</option>
-            <option value="hi">🇮🇳 हिन्दी</option>
-            <option value="he">🇱 עברית</option>
-            <option value="ja">🇯🇵 日本語</option>
-            <option value="ko">🇰🇷 한국어</option>
-            <option value="ar">🇸 العربية</option>
-        </select>
+    <option value="th">🇹🇭 ไทย</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="zh">🇨🇳 中文</option>
+    <option value="ru">🇷🇺 Русский</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+    <option value="he">🇮🇱 עברית</option>
+    <option value="ja">🇯🇵 日本語</option>
+    <option value="ko">🇰🇷 한국어</option>
+    <option value="ar">🇸🇦 العربية</option>
+</select>
     </div>
     </div>
 
@@ -2871,5 +2871,141 @@ document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(rende
             changeLang(currentLang);
         };
     </script>
+    <!-- ===== TTS ADD-ON: วางบล็อกนี้ก่อน </body> (ต่อจาก <script> หลักของหน้า) ===== -->
+<style>
+.tts-bar { background:#f4f6fb; border:2px solid var(--primary); border-radius:12px; padding:12px; margin:0 0 15px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.tts-bar select { flex:1 1 130px; min-width:0; padding:8px; border-radius:8px; border:1px solid #ccc; font-size:14px; background:#fff; color:#1a1a2e; }
+.tts-bar .btn { margin:0; display:inline-flex; align-items:center; gap:6px; }
+.tts-bar .btn.speaking { background:#e74c3c; }
+.tts-note { width:100%; font-size:0.8em; color:#856404; }
+</style>
+<script>
+(function () {
+  const supported = 'speechSynthesis' in window;
+  const langCodes = { th:'th-TH', en:'en-US', zh:'zh-CN', ru:'ru-RU', hi:'hi-IN', he:'he-IL', ja:'ja-JP', ko:'ko-KR', ar:'ar-SA' };
+  const langNames = { th:'🇹🇭 ไทย', en:'🇬🇧 English', zh:'🇨🇳 中文', ru:'🇷🇺 Русский', hi:'🇮🇳 हिन्दी', he:'🇮🇱 עברית', ja:'🇯🇵 日本語', ko:'🇰🇷 한국어', ar:'🇸🇦 العربية' };
+  const labels = {
+    th:{ listen:'ฟังบรรยาย', stop:'หยุด', auto:'เสียงอัตโนมัติ', novoice:'ไม่พบเสียงภาษานี้ในอุปกรณ์ จะใช้เสียงเริ่มต้นของเบราว์เซอร์ (ติดตั้งเสียงภาษานี้ได้ในการตั้งค่าอุปกรณ์)', unsupported:'เบราว์เซอร์นี้ไม่รองรับการอ่านออกเสียง' },
+    en:{ listen:'Listen', stop:'Stop', auto:'Auto voice', novoice:'No voice for this language found on your device; the browser default will be used.', unsupported:'Your browser does not support speech playback.' },
+    zh:{ listen:'收听讲解', stop:'停止', auto:'自动语音', novoice:'设备上未找到该语言的语音，将使用浏览器默认语音。', unsupported:'您的浏览器不支持语音播放。' },
+    ru:{ listen:'Слушать', stop:'Стоп', auto:'Голос по умолчанию', novoice:'Голос для этого языка не найден на устройстве, будет использован голос браузера.', unsupported:'Ваш браузер не поддерживает озвучивание.' },
+    hi:{ listen:'सुनें', stop:'रोकें', auto:'ऑटो आवाज़', novoice:'इस भाषा की आवाज़ आपके डिवाइस पर नहीं मिली; ब्राउज़र की डिफ़ॉल्ट आवाज़ इस्तेमाल होगी।', unsupported:'आपका ब्राउज़र आवाज़ में पढ़ने की सुविधा का समर्थन नहीं करता।' },
+    he:{ listen:'האזנה', stop:'עצור', auto:'קול אוטומטי', novoice:'לא נמצא קול לשפה זו במכשיר; ייעשה שימוש בקול ברירת המחדל של הדפדפן.', unsupported:'הדפדפן אינו תומך בהקראה.' },
+    ja:{ listen:'音声で聞く', stop:'停止', auto:'自動音声', novoice:'この言語の音声が端末に見つかりません。ブラウザの既定の音声を使用します。', unsupported:'このブラウザは音声読み上げに対応していません。' },
+    ko:{ listen:'음성으로 듣기', stop:'정지', auto:'자동 음성', novoice:'이 언어의 음성이 기기에 없습니다. 브라우저 기본 음성을 사용합니다.', unsupported:'이 브라우저는 음성 읽기를 지원하지 않습니다.' },
+    ar:{ listen:'استمع', stop:'إيقاف', auto:'صوت تلقائي', novoice:'لم يتم العثور على صوت لهذه اللغة على جهازك؛ سيتم استخدام صوت المتصفح الافتراضي.', unsupported:'متصفحك لا يدعم القراءة الصوتية.' }
+  };
+
+  let idx = -1, token = 0, speaking = false;
+  const L = () => labels[currentLang] || labels.en;
+  const $ = id => document.getElementById(id);
+
+  function getPref() { try { return JSON.parse(localStorage.getItem('ripleysTts')) || {}; } catch (e) { return {}; } }
+  function savePref(lang, uri) {
+    try { const p = getPref(); p.voices = p.voices || {}; p.voices[lang] = uri; localStorage.setItem('ripleysTts', JSON.stringify(p)); } catch (e) {}
+  }
+
+  function voicesFor(lang) {
+    const prefixes = lang === 'he' ? ['he', 'iw'] : [lang];
+    return speechSynthesis.getVoices().filter(v => {
+      const l = v.lang.toLowerCase().replace('_', '-');
+      return prefixes.some(p => l === p || l.startsWith(p + '-'));
+    });
+  }
+
+  function renderVoices() {
+    const sel = $('ttsVoice'); if (!sel) return;
+    const lang = $('ttsLang').value;
+    const voices = voicesFor(lang);
+    const saved = (getPref().voices || {})[lang];
+    sel.innerHTML = `<option value="">${L().auto}</option>` + voices.map(v =>
+      `<option value="${v.voiceURI.replace(/"/g, '&quot;')}" ${v.voiceURI === saved ? 'selected' : ''}>${v.name}</option>`).join('');
+    const note = $('ttsNote');
+    note.style.display = voices.length ? 'none' : 'block';
+    note.textContent = voices.length ? '' : L().novoice;
+  }
+
+  function chunks(text) {
+    const parts = text.replace(/\s+/g, ' ').match(/[^.!?。！？…]+[.!?。！？…]*/g) || [text];
+    const out = [];
+    parts.forEach(p => {
+      p = p.trim();
+      while (p.length > 160) {
+        let cut = p.lastIndexOf(' ', 160);
+        if (cut < 40) cut = 160;
+        out.push(p.slice(0, cut)); p = p.slice(cut).trim();
+      }
+      if (p) out.push(p);
+    });
+    return out;
+  }
+
+  function setUI(on) {
+    speaking = on;
+    const b = $('ttsBtn'); if (!b) return;
+    b.innerHTML = on ? `<i class="fas fa-stop"></i> ${L().stop}` : `<i class="fas fa-volume-up"></i> ${L().listen}`;
+    b.classList.toggle('speaking', on);
+  }
+
+  function speak() {
+    speechSynthesis.cancel();
+    const lang = $('ttsLang').value;
+    const item = getAttractions(lang)[idx]; if (!item) return;
+    const text = [item.title, item.subtitle, item.desc].filter(Boolean).join('. ');
+    const uri = $('ttsVoice').value;
+    const voice = uri ? speechSynthesis.getVoices().find(v => v.voiceURI === uri) : null;
+    const rate = parseFloat($('ttsRate').value) || 1;
+    const list = chunks(text), my = ++token;
+    let i = 0;
+    const next = () => {
+      if (my !== token) return;
+      if (i >= list.length) { setUI(false); return; }
+      const u = new SpeechSynthesisUtterance(list[i++]);
+      u.lang = langCodes[lang]; if (voice) { u.voice = voice; u.lang = voice.lang; }
+      u.rate = rate; u.onend = next;
+      u.onerror = () => { if (my === token) setUI(false); };
+      speechSynthesis.speak(u);
+    };
+    setUI(true); next();
+  }
+
+  function stop() { token++; if (supported) speechSynthesis.cancel(); setUI(false); }
+
+  window.ttsToggle = () => speaking ? stop() : speak();
+  window.ttsOnLangChange = () => { stop(); renderVoices(); };
+  window.ttsOnVoiceChange = () => { savePref($('ttsLang').value, $('ttsVoice').value); if (speaking) speak(); };
+
+  function barHTML() {
+    if (!supported) return `<div class="tts-bar"><div class="tts-note" style="display:block">${L().unsupported}</div></div>`;
+    return `<div class="tts-bar">
+      <button class="btn btn-success" id="ttsBtn" onclick="ttsToggle()"><i class="fas fa-volume-up"></i> ${L().listen}</button>
+      <select id="ttsLang" onchange="ttsOnLangChange()">${Object.keys(langNames).map(k => `<option value="${k}" ${k === currentLang ? 'selected' : ''}>${langNames[k]}</option>`).join('')}</select>
+      <select id="ttsVoice" onchange="ttsOnVoiceChange()"></select>
+      <select id="ttsRate" onchange="ttsOnVoiceChange()"><option value="0.8">0.8x</option><option value="1" selected>1x</option><option value="1.2">1.2x</option></select>
+      <div class="tts-note" id="ttsNote" style="display:none"></div>
+    </div>`;
+  }
+
+  // ครอบฟังก์ชันเดิม ไม่ต้องแก้โค้ดเดิม
+  const _open = window.openAttractionDetail;
+  window.openAttractionDetail = function (index) {
+    _open(index);
+    idx = index;
+    const p = document.querySelector('#modalContent p');
+    if (p) p.insertAdjacentHTML('beforebegin', barHTML());
+    if (supported) renderVoices();
+  };
+  const _close = window.closeAttractionModal;
+  window.closeAttractionModal = function () { stop(); _close(); };
+  const _lang = window.changeLang;
+  window.changeLang = function (l) { stop(); _lang(l); };
+
+  if (supported) {
+    speechSynthesis.onvoiceschanged = renderVoices; // เสียงในบางเบราว์เซอร์โหลดช้า
+    window.addEventListener('beforeunload', () => speechSynthesis.cancel());
+  }
+})();
+</script>
+<!-- ===== END TTS ADD-ON ===== -->
 </body>
 </html>
