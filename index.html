@@ -3081,7 +3081,9 @@ document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(rende
     $('shareQr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=440x440&margin=0&data=' + encodeURIComponent(url);
     $('shareLink').value = url;
     $('shareLine').href = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(url);
-    $('shareFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+console.log('FB URL:', fbUrl);
+$('shareFb').href = fbUrl;
     $('shareNative').style.display = navigator.share ? 'inline-flex' : 'none';
     applyLabels();
     $('navContainer').classList.remove('open');
@@ -3109,9 +3111,13 @@ document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(rende
     else fallback();
   };
 
-  $('shareNative').onclick = () => {
-    if (navigator.share) navigator.share({ title: document.title, url: pageUrl() }).catch(() => {});
-  };
+    // ใช้เมนูแชร์ของเครื่องแทนหน้า sharer (กัน Facebook บล็อกลิงก์ GAS)
+  $('shareFb').addEventListener('click', e => {
+    if (navigator.share) {
+      e.preventDefault();
+      navigator.share({ title: document.title, url: pageUrl() }).catch(() => {});
+    }
+  });
 
   // อัปเดตข้อความเมื่อเปลี่ยนภาษา
   const _lang = window.changeLang;
