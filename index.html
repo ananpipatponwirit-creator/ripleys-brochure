@@ -226,9 +226,7 @@
             <button class="nav-btn" onclick="showSection('contact')">
                 <i class="fas fa-map-marker-alt"></i> <span data-i18n="nav_contact">ติดต่อเรา</span>
             </button>
-            <button class="nav-btn" onclick="showSection('admin')">
-                <i class="fas fa-lock"></i> Admin
-            </button>
+            
         </div>
     </nav>
 
@@ -2868,9 +2866,22 @@ document.getElementById('drinksGrid').innerHTML = siteData.menu.drinks.map(rende
     }
 }
 
-        window.onload = () => {
-            changeLang(currentLang);
-        };
+        function openAdminFromHash() {
+    if (location.hash.toLowerCase() === '#admin') {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('admin').classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        window.scrollTo(0, 0);
+    }
+}
+
+window.onload = () => {
+    changeLang(currentLang);
+    openAdminFromHash();
+};
+
+// รองรับกรณีเปลี่ยน # โดยที่หน้าเว็บโหลดอยู่แล้ว
+window.addEventListener('hashchange', openAdminFromHash);
     </script>
     <!-- ===== TTS ADD-ON: วางบล็อกนี้ก่อน </body> (ต่อจาก <script> หลักของหน้า) ===== -->
 <style>
