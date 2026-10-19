@@ -3137,5 +3137,739 @@ $('shareFb').href = fbUrl;
 })();
 </script>
 <!-- ===== END SHARE ADD-ON ===== -->
+    <!-- ===== MEMBER ADD-ON: วางบล็อกนี้ก่อน </body> (ต่อจาก SHARE ADD-ON เป็นบล็อกสุดท้าย) ===== -->
+<style>
+.mb-wrap { max-width: 900px; margin: 0 auto; }
+.mb-card { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.3); color: #333; }
+.mb-head { background: linear-gradient(135deg, #3b1f9e, #6366f1); color: #fff; text-align: center; padding: 26px 20px; }
+.mb-head h2 { font-size: 1.5em; margin-bottom: 4px; }
+.mb-head p { opacity: .9; font-size: .95em; }
+.mb-body { padding: 28px 30px; }
+.mb-sec { background: #f0f4ff; border-left: 5px solid #6366f1; border-radius: 12px; padding: 12px 16px; margin: 26px 0 16px; font-weight: 700; color: #3b1f9e; display: flex; align-items: center; gap: 10px; }
+.mb-sec:first-child { margin-top: 0; }
+[dir="rtl"] .mb-sec { border-left: 0; border-right: 5px solid #6366f1; }
+.mb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mb-card .form-group input, .mb-card .form-group select, .mb-card .form-group textarea { border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px 14px; font-size: 1em; font-family: inherit; background: #fff; color: #222; }
+.mb-card .form-group input:focus, .mb-card .form-group select:focus, .mb-card .form-group textarea:focus { outline: none; border-color: #6366f1; }
+.mb-card .form-group input[readonly] { background: #f3f4f6; }
+.req { color: #e11d48; }
+.mb-types { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mb-type { border: 2px solid #e5e7eb; border-radius: 16px; padding: 22px 10px; text-align: center; cursor: pointer; background: #fff; transition: .2s; }
+.mb-type i { font-size: 2.2em; color: #6366f1; margin-bottom: 10px; display: block; }
+.mb-type b { display: block; font-size: 1.1em; color: #1f1f3a; }
+.mb-type small { color: #888; }
+.mb-type.sel { background: #e0e7ff; border-color: #3b1f9e; box-shadow: 0 0 0 4px rgba(99,102,241,.2); }
+.mb-pw { position: relative; }
+.mb-pw input { padding-right: 44px !important; }
+.mb-pw button { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: 0; color: #888; cursor: pointer; font-size: 1.1em; }
+[dir="rtl"] .mb-pw input { padding-right: 14px !important; padding-left: 44px !important; }
+[dir="rtl"] .mb-pw button { right: auto; left: 10px; }
+.mb-drop { border: 2px dashed #cbd5e1; border-radius: 16px; background: #f8fafc; padding: 34px 16px; text-align: center; cursor: pointer; color: #555; }
+.mb-drop.over { border-color: #6366f1; background: #eef2ff; }
+.mb-drop i { font-size: 2.6em; color: #6366f1; margin-bottom: 8px; }
+.mb-drop small { display: block; color: #999; margin-top: 4px; }
+.mb-photo { text-align: center; }
+.mb-photo img { max-width: 100%; max-height: 260px; border-radius: 12px; border: 2px solid #eee; }
+.mb-msg { border-radius: 10px; padding: 12px 14px; margin: 14px 0; font-size: .95em; display: none; }
+.mb-msg.err { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.mb-msg.ok { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.mb-submit, .mb-submit:hover { width: 100%; margin: 20px 0 0; padding: 15px; font-size: 1.1em; background: linear-gradient(135deg, #3b1f9e, #6366f1); border-radius: 12px; }
+.mb-submit:hover { filter: brightness(1.12); }
+.mb-info { display: grid; grid-template-columns: 150px 1fr; gap: 10px 14px; margin-bottom: 10px; }
+.mb-info dt { color: #888; }
+.mb-info dd { font-weight: 600; color: #1f1f3a; word-break: break-word; }
+.mb-badge { display: inline-block; background: #e0e7ff; color: #3b1f9e; border-radius: 20px; padding: 3px 14px; font-weight: 700; }
+.mb-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.mb-actions .btn { margin: 0; }
+.mb-ride { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 8px; cursor: pointer; }
+.mb-ride input { width: 20px; height: 20px; accent-color: #6366f1; flex-shrink: 0; }
+.mb-ride img { width: 40px; height: 40px; object-fit: contain; border-radius: 50%; background: #f4f4f4; flex-shrink: 0; }
+.mb-ride span { flex: 1; min-width: 0; }
+.mb-ride b { color: #e94560; white-space: nowrap; }
+.mb-ride.on { border-color: #6366f1; background: #eef2ff; }
+.mb-ride.off { opacity: .45; cursor: not-allowed; }
+.mb-total { display: flex; justify-content: space-between; align-items: center; background: #1a1a2e; color: #ffd700; border-radius: 12px; padding: 14px 18px; font-size: 1.2em; font-weight: 700; margin-top: 16px; }
+.mb-hint { color: #888; font-size: .85em; margin-top: 6px; }
+.mb-ticket { border: 2px dashed #cbd5e1; border-radius: 14px; padding: 16px; margin-bottom: 16px; background: #fff; }
+.mb-ticket-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.mb-code { font-size: 1.3em; font-weight: 800; color: #1a1a2e; letter-spacing: 1px; }
+.mb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.mb-chips span { background: #f0f4ff; color: #3b1f9e; border-radius: 14px; padding: 3px 12px; font-size: .85em; }
+.mb-ticket .btn { margin: 8px 0 0; }
+.mb-img-box { max-width: 520px; text-align: center; }
+.mb-img-box img { width: 100%; border-radius: 10px; border: 1px solid #eee; }
+.mb-img-box .mb-actions { justify-content: center; }
+@media (max-width: 600px) {
+  .mb-row { grid-template-columns: 1fr; }
+  .mb-body { padding: 20px 16px; }
+  .mb-info { grid-template-columns: 1fr; gap: 2px; }
+  .mb-info dd { margin-bottom: 8px; }
+}
+</style>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /* ---------- ข้อความ (ไทย/อังกฤษเต็ม ภาษาอื่นใช้ภาษาอังกฤษแทน) ---------- */
+  const T = {
+    th: {
+      nav_member: 'สมาชิก', nav_profile: 'โปรไฟล์', nav_booking: 'จองตั๋ว',
+      tab_login: 'เข้าสู่ระบบ', tab_register: 'สมัครสมาชิก',
+      login_title: 'เข้าสู่ระบบสมาชิก', login_sub: 'กรอกอีเมลและรหัสผ่านที่ใช้สมัคร', login_btn: 'เข้าสู่ระบบ',
+      email: 'อีเมล', email_ph: 'example@email.com', password: 'รหัสผ่าน',
+      reg_title: 'แบบฟอร์มลงทะเบียน', reg_sub: 'ช่องที่มีเครื่องหมาย * จำเป็นต้องกรอก',
+      sec_type: 'เลือกประเภทสมาชิก', type_guide: 'ไกด์', type_guide_sub: 'มีบัตรไกด์', type_taxi: 'Taxi', type_taxi_sub: 'ไม่มีบัตรไกด์',
+      sec_personal: 'ข้อมูลส่วนตัว', fname: 'ชื่อ', fname_ph: 'เช่น สมชาย', lname: 'นามสกุล', lname_ph: 'เช่น ใจดี',
+      guide_no: 'เลขบัตรไกด์', guide_no_ph: 'เช่น GD-12345', plate: 'ทะเบียนรถ', plate_ph: 'เช่น 1กก 1234',
+      phone: 'เบอร์โทรศัพท์', phone_ph: '08X-XXX-XXXX',
+      sec_pw: 'ตั้งรหัสผ่าน', pw_ph: 'อย่างน้อย 6 ตัวอักษร', pw2: 'ยืนยันรหัสผ่าน', pw2_ph: 'กรอกอีกครั้ง',
+      sec_photo_guide: 'ภาพถ่ายบัตรไกด์', sec_photo_taxi: 'ภาพถ่ายเอกสารยืนยันตัวตน',
+      photo_click: 'คลิกเพื่ออัปโหลดรูป', photo_or: ' หรือลากไฟล์มาวาง', photo_hint: 'รองรับรูปภาพทุกชนิด (ระบบย่อขนาดให้อัตโนมัติ)', photo_remove: 'ลบรูป',
+      sec_bank: 'ข้อมูลบัญชีธนาคาร', bank: 'ธนาคาร', bank_sel: '-- เลือกธนาคาร --', bank_no: 'เลขที่บัญชี',
+      sec_sales: 'Sales Register', sales_ph: 'ระบุข้อมูล Sales Register ของท่าน', submit_reg: 'ตรวจสอบเงื่อนไขและสมัครสมาชิก',
+      e_req: 'กรุณากรอกข้อมูลที่มี * ให้ครบ', e_email: 'รูปแบบอีเมลไม่ถูกต้อง', e_pw: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
+      e_pw2: 'รหัสผ่านทั้งสองช่องไม่ตรงกัน', e_phone: 'เบอร์โทรศัพท์ไม่ถูกต้อง', e_bankno: 'เลขที่บัญชีไม่ถูกต้อง (ตัวเลข 10–15 หลัก)',
+      e_dup: 'อีเมลนี้สมัครสมาชิกไว้แล้ว', e_login: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+      e_save: 'บันทึกข้อมูลไม่สำเร็จ (พื้นที่เก็บข้อมูลของเบราว์เซอร์เต็ม) ลองลบรูปหรือข้อมูลเก่าออก',
+      e_img: 'ไม่สามารถอ่านไฟล์นี้ได้ กรุณาเลือกไฟล์รูปภาพ (JPG/PNG)',
+      profile_title: 'โปรไฟล์สมาชิก', p_type: 'ประเภทสมาชิก', p_name: 'ชื่อ-นามสกุล', p_since: 'สมัครเมื่อ', p_bookings: 'จำนวนการจอง',
+      edit: 'แก้ไขข้อมูล', save: 'บันทึก', cancel: 'ยกเลิก', logout: 'ออกจากระบบ', go_book: 'จองเครื่องเล่น', my_bk: 'บุ๊คกิ้งของฉัน', saved_ok: 'บันทึกข้อมูลแล้ว',
+      bk_title: 'จองเครื่องเล่น', bk_new: 'จองใหม่', bk_mine: 'บุ๊คกิ้งของฉัน', bk_need_login: 'กรุณาเข้าสู่ระบบสมาชิกก่อนทำการจอง',
+      bk_pkg: 'รูปแบบตั๋ว', bk_single: 'เลือกเครื่องเล่นเดี่ยว', bk_date: 'วันที่เข้าชม',
+      bk_adult: 'ผู้ใหญ่ (สูงเกิน 120 ซม.)', bk_child: 'เด็ก (81–120 ซม.)', bk_infant: 'เด็กเล็ก (ไม่เกิน 80 ซม. เข้าฟรี)',
+      bk_rides: 'เลือกเครื่องเล่น', bk_pick: 'เลือกแล้ว {c} / {n}', bk_picked: 'เลือกแล้ว {c} รายการ',
+      bk_notes: 'หมายเหตุ (ไม่บังคับ)', bk_total: 'ยอดรวมโดยประมาณ', bk_note_est: 'ตั๋วเดี่ยวคิดราคาเท่ากันทุกคน ยอดจริงเป็นไปตามเงื่อนไขส่วนสูง',
+      bk_confirm: 'ตรวจสอบเงื่อนไขและยืนยันการจอง',
+      e_date: 'กรุณาเลือกวันที่เข้าชม (ห้ามย้อนหลัง)', e_guests: 'กรุณาระบุผู้เข้าชมอย่างน้อย 1 คน (ผู้ใหญ่หรือเด็ก)',
+      e_rides_n: 'กรุณาเลือกเครื่องเล่นให้ครบ {n} รายการ', e_rides_0: 'กรุณาเลือกเครื่องเล่นอย่างน้อย 1 รายการ',
+      bk_ok: 'จองสำเร็จ! รหัสการจอง {code}', bk_empty: 'ยังไม่มีรายการจอง',
+      bk_code: 'รหัสการจอง', bk_guests: 'ผู้เข้าชม', bk_save_img: 'บันทึกเป็นรูปภาพ', bk_dl: 'ดาวน์โหลดรูป', bk_share: 'แชร์ / บันทึก',
+      bk_hold: 'บนมือถือ: กดค้างที่รูปเพื่อบันทึกได้', bk_show: 'แสดงภาพนี้พร้อมรหัสการจองกับเจ้าหน้าที่',
+      adult_s: 'ผู้ใหญ่', child_s: 'เด็ก', infant_s: 'เด็กเล็ก', close: 'ปิด',
+      terms_ok: 'ยอมรับและยืนยัน'
+    },
+    en: {
+      nav_member: 'Member', nav_profile: 'Profile', nav_booking: 'Book',
+      tab_login: 'Log in', tab_register: 'Register',
+      login_title: 'Member Login', login_sub: 'Enter the email and password you registered with', login_btn: 'Log in',
+      email: 'Email', email_ph: 'example@email.com', password: 'Password',
+      reg_title: 'Registration Form', reg_sub: 'Fields marked * are required',
+      sec_type: 'Member type', type_guide: 'Guide', type_guide_sub: 'Has a guide card', type_taxi: 'Taxi', type_taxi_sub: 'No guide card',
+      sec_personal: 'Personal information', fname: 'First name', fname_ph: 'e.g. Somchai', lname: 'Last name', lname_ph: 'e.g. Jaidee',
+      guide_no: 'Guide card number', guide_no_ph: 'e.g. GD-12345', plate: 'Vehicle plate', plate_ph: 'e.g. 1AB 1234',
+      phone: 'Phone number', phone_ph: '08X-XXX-XXXX',
+      sec_pw: 'Set password', pw_ph: 'At least 6 characters', pw2: 'Confirm password', pw2_ph: 'Enter again',
+      sec_photo_guide: 'Guide card photo', sec_photo_taxi: 'ID document photo',
+      photo_click: 'Click to upload', photo_or: ' or drag a file here', photo_hint: 'All image types supported (auto-resized)', photo_remove: 'Remove photo',
+      sec_bank: 'Bank account', bank: 'Bank', bank_sel: '-- Select bank --', bank_no: 'Account number',
+      sec_sales: 'Sales Register', sales_ph: 'Enter your Sales Register information', submit_reg: 'Review terms & register',
+      e_req: 'Please fill in all fields marked *', e_email: 'Invalid email format', e_pw: 'Password must be at least 6 characters',
+      e_pw2: 'Passwords do not match', e_phone: 'Invalid phone number', e_bankno: 'Invalid account number (10–15 digits)',
+      e_dup: 'This email is already registered', e_login: 'Incorrect email or password',
+      e_save: 'Could not save (browser storage is full). Try removing the photo or old data.',
+      e_img: 'Cannot read this file. Please choose an image (JPG/PNG).',
+      profile_title: 'Member Profile', p_type: 'Member type', p_name: 'Full name', p_since: 'Member since', p_bookings: 'Bookings',
+      edit: 'Edit', save: 'Save', cancel: 'Cancel', logout: 'Log out', go_book: 'Book attractions', my_bk: 'My bookings', saved_ok: 'Saved',
+      bk_title: 'Book Attractions', bk_new: 'New booking', bk_mine: 'My bookings', bk_need_login: 'Please log in as a member before booking',
+      bk_pkg: 'Ticket type', bk_single: 'Single attractions', bk_date: 'Visit date',
+      bk_adult: 'Adult (over 120 cm)', bk_child: 'Child (81–120 cm)', bk_infant: 'Small child (up to 80 cm, free)',
+      bk_rides: 'Choose attractions', bk_pick: 'Selected {c} / {n}', bk_picked: 'Selected {c}',
+      bk_notes: 'Notes (optional)', bk_total: 'Estimated total', bk_note_est: 'Single tickets use one price for everyone; final price follows the height rules',
+      bk_confirm: 'Review terms & confirm booking',
+      e_date: 'Please choose a visit date (not in the past)', e_guests: 'Please enter at least 1 guest (adult or child)',
+      e_rides_n: 'Please select exactly {n} attractions', e_rides_0: 'Please select at least 1 attraction',
+      bk_ok: 'Booked! Booking code {code}', bk_empty: 'No bookings yet',
+      bk_code: 'Booking code', bk_guests: 'Guests', bk_save_img: 'Save as image', bk_dl: 'Download image', bk_share: 'Share / Save',
+      bk_hold: 'On mobile: press and hold the image to save', bk_show: 'Show this image and booking code to our staff',
+      adult_s: 'adult', child_s: 'child', infant_s: 'small child', close: 'Close',
+      terms_ok: 'Accept & Confirm'
+    }
+  };
+  const L = () => Object.assign({}, T.en, T[currentLang] || {});
+  const TR = () => translations[currentLang] || translations.en;
+
+  /* ---------- ชั้นเก็บข้อมูล (localStorage) — เปลี่ยนเป็น API หลังบ้านได้ที่ส่วนนี้ ---------- */
+  const K = { m: 'ripleysMembers', s: 'ripleysSession', b: 'ripleysBookings' };
+  const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const members = () => load(K.m, []);
+  const bookings = () => load(K.b, []);
+  const sessionId = () => { try { return localStorage.getItem(K.s); } catch (e) { return null; } };
+  const cur = () => { const id = sessionId(); return id ? (members().find(m => m.id === id) || null) : null; };
+  const uid = () => 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  async function hashPw(pw, salt) {
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + ':' + pw));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) { return 'plain:' + pw; }
+  }
+  function resizeImage(file, max) {
+    max = max || 900;
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onerror = rej;
+      r.onload = () => {
+        const im = new Image();
+        im.onerror = rej;
+        im.onload = () => {
+          const k = Math.min(1, max / Math.max(im.width, im.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+          c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+          res(c.toDataURL('image/jpeg', 0.75));
+        };
+        im.src = r.result;
+      };
+      r.readAsDataURL(file);
+    });
+  }
+
+  const BANKS = ['ธนาคารกสิกรไทย (KBank)', 'ธนาคารไทยพาณิชย์ (SCB)', 'ธนาคารกรุงเทพ (BBL)', 'ธนาคารกรุงไทย (KTB)', 'ธนาคารกรุงศรีอยุธยา (BAY)', 'ธนาคารทหารไทยธนชาต (ttb)', 'ธนาคารออมสิน (GSB)', 'ธ.ก.ส. (BAAC)', 'ธนาคารซีไอเอ็มบี ไทย (CIMB)', 'ธนาคารยูโอบี (UOB)', 'อื่น ๆ / Other'];
+  const COMBO = { '3': [1600, 1300], '5': [1800, 1500], '7': [2000, 1700] }; // [ผู้ใหญ่, เด็ก] ตรงกับหน้าราคา
+  const EXCL_ICONS = ['fa-hospital', 'fa-skull']; // โรงพยาบาลหลอน / หนีตายสวนสยอง ไม่รวมใน COMBO
+
+  /* ---------- state ---------- */
+  let authTab = 'login', afterAuth = null, bkTab = 'new', flash = '', profEdit = false, termsCb = null;
+  let reg = { type: 'guide' };
+  const bkInit = () => ({ pkg: 'single', date: '', adults: 1, children: 0, infants: 0, rides: [], notes: '' });
+  let bk = bkInit();
+
+  function setMsg(id, text, type) {
+    const el = $(id); if (!el) return;
+    el.className = 'mb-msg' + (text ? ' ' + type : '');
+    el.textContent = text || '';
+    if (text && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+  const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const fmtDate = d => { try { return new Date(d + 'T00:00:00').toLocaleDateString(currentLang, { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return d; } };
+  const tpl = (s, o) => Object.keys(o).reduce((a, k) => a.replace('{' + k + '}', o[k]), s);
+
+  /* ---------- สร้างหน้า + ปุ่มเมนู ---------- */
+  const firstOverlay = document.querySelector('.modal-overlay');
+  ['member', 'profile', 'booking'].forEach(id => {
+    const s = document.createElement('section');
+    s.id = id; s.className = 'section';
+    document.body.insertBefore(s, firstOverlay);
+  });
+  const nav = $('navContainer');
+  function navBtn(key, icon) {
+    const b = document.createElement('button');
+    b.className = 'nav-btn'; b.dataset.mb = key;
+    b.innerHTML = '<i class="fas ' + icon + '"></i> <span></span>';
+    nav.appendChild(b); return b;
+  }
+  const memberBtn = navBtn('member', 'fa-user-circle');
+  const bookingBtn = navBtn('booking', 'fa-calendar-check');
+  memberBtn.onclick = () => goSection(cur() ? 'profile' : 'member');
+  bookingBtn.onclick = () => goSection('booking');
+
+  function refreshNav() {
+    const t = L(), m = cur();
+    memberBtn.querySelector('span').textContent = m ? t.nav_profile : t.nav_member;
+    memberBtn.querySelector('i').className = 'fas ' + (m ? 'fa-user-circle' : 'fa-user-plus');
+    bookingBtn.querySelector('span').textContent = t.nav_booking;
+  }
+
+  function goSection(id) {
+    if (id === 'profile' && !cur()) { id = 'member'; authTab = 'login'; }
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const key = id === 'profile' ? 'member' : id;
+    const nb = document.querySelector('.nav-btn[data-mb="' + key + '"]');
+    if (nb) nb.classList.add('active');
+    nav.classList.remove('open');
+    window.scrollTo(0, 0);
+    renderSection(id);
+  }
+  function renderSection(id) {
+    if (id === 'member') renderAuth();
+    else if (id === 'profile') renderProfile();
+    else if (id === 'booking') renderBooking();
+  }
+  const hero = t => '<div class="hero"><h1>' + esc(t) + '</h1></div>';
+
+  /* ---------- ป๊อปอัพเงื่อนไข ---------- */
+  const termsOv = document.createElement('div');
+  termsOv.className = 'modal-overlay';
+  termsOv.innerHTML = '<div class="modal-box terms-modal-box">' +
+    '<button class="modal-close" id="mbTermsX" aria-label="Close"><i class="fas fa-times"></i></button>' +
+    '<div id="mbTermsBody"></div>' +
+    '<div class="terms-accept-bar"><label><input type="checkbox" id="mbTermsChk"><span id="mbTermsLbl"></span></label>' +
+    '<button class="btn btn-success" id="mbTermsOk" disabled><i class="fas fa-check-circle"></i> <span id="mbTermsOkLbl"></span></button></div></div>';
+  document.body.appendChild(termsOv);
+  function unlockIfNone() { if (!document.querySelector('.modal-overlay.show')) document.body.style.overflow = ''; }
+  function closeTerms() { termsOv.classList.remove('show'); termsCb = null; unlockIfNone(); }
+  $('mbTermsX').onclick = closeTerms;
+  termsOv.addEventListener('click', e => { if (e.target === termsOv) closeTerms(); });
+  $('mbTermsChk').onchange = e => { $('mbTermsOk').disabled = !e.target.checked; };
+  $('mbTermsOk').onclick = () => { const cb = termsCb; termsCb = null; termsOv.classList.remove('show'); unlockIfNone(); if (cb) cb(); };
+  function askTerms(cb) {
+    const tr = TR(), t = L();
+    const step = (ic, k) => '<div class="step"><div class="step-num"><i class="fas ' + ic + '"></i></div><div>' + (tr[k] || '') + '</div></div>';
+    $('mbTermsBody').innerHTML =
+      '<h2><i class="fas fa-file-contract"></i> ' + (tr.coupon_ticket_title || '') + '</h2>' +
+      '<div class="terms-section"><h3>' + (tr.ticket_policy_title || '') + '</h3>' + step('fa-ban', 'ticket_policy_1') + step('fa-hand-holding', 'ticket_policy_2') + step('fa-user', 'ticket_policy_3') + '</div>' +
+      '<div class="terms-section"><h3>' + (tr.ticket_height_title || '') + '</h3>' + step('fa-baby', 'ticket_height_1') + step('fa-child', 'ticket_height_2') + step('fa-male', 'ticket_height_3') + '</div>' +
+      '<div class="terms-section"><h3>' + (tr.ticket_online_title || '') + '</h3>' + step('fa-search', 'ticket_online_1') + step('fa-file-invoice', 'ticket_online_2') + '</div>';
+    $('mbTermsLbl').textContent = tr.terms_checkbox || '';
+    $('mbTermsOkLbl').textContent = t.terms_ok;
+    $('mbTermsChk').checked = false; $('mbTermsOk').disabled = true;
+    termsCb = cb;
+    termsOv.classList.add('show'); document.body.style.overflow = 'hidden';
+    $('mbTermsBody').parentNode.scrollTop = 0;
+  }
+
+  /* ---------- สมัครสมาชิก / เข้าสู่ระบบ ---------- */
+  const sec = (icon, text) => '<div class="mb-sec"><i class="fas ' + icon + '"></i> ' + esc(text) + '</div>';
+  const field = (label, k, ph, o) => {
+    o = o || {};
+    return '<div class="form-group"><label>' + esc(label) + (o.opt ? '' : ' <span class="req">*</span>') + '</label>' +
+      '<input type="' + (o.type || 'text') + '" data-k="' + k + '" value="' + esc(reg[k] || '') + '" placeholder="' + esc(ph || '') + '"' + (o.mode ? ' inputmode="' + o.mode + '"' : '') + ' autocomplete="' + (o.ac || 'off') + '"></div>';
+  };
+
+  function renderAuth() {
+    const t = L(), el = $('member');
+    const tabs = '<div class="tabs" style="justify-content:center">' +
+      '<button class="tab ' + (authTab === 'login' ? 'active' : '') + '" data-tab="login">' + esc(t.tab_login) + '</button>' +
+      '<button class="tab ' + (authTab === 'register' ? 'active' : '') + '" data-tab="register">' + esc(t.tab_register) + '</button></div>';
+    let body;
+    if (authTab === 'login') {
+      body = '<div class="mb-card" style="max-width:520px;margin:0 auto"><div class="mb-head"><h2><i class="fas fa-user-lock"></i> ' + esc(t.login_title) + '</h2><p>' + esc(t.login_sub) + '</p></div>' +
+        '<form class="mb-body" id="loginForm" novalidate>' +
+        '<div class="form-group"><label>' + esc(t.email) + '</label><input type="email" id="lgEmail" autocomplete="email" placeholder="' + esc(t.email_ph) + '"></div>' +
+        '<div class="form-group"><label>' + esc(t.password) + '</label><input type="password" id="lgPw" autocomplete="current-password"></div>' +
+        '<div class="mb-msg" id="lgMsg"></div>' +
+        '<button class="btn mb-submit" type="submit"><i class="fas fa-sign-in-alt"></i> ' + esc(t.login_btn) + '</button></form></div>';
+    } else {
+      const guide = reg.type !== 'taxi';
+      body = '<div class="mb-card"><div class="mb-head"><h2><i class="fas fa-id-badge"></i> ' + esc(t.reg_title) + '</h2><p>' + esc(t.reg_sub) + '</p></div>' +
+        '<form class="mb-body" id="regForm" novalidate>' +
+        sec('fa-user-check', t.sec_type) +
+        '<div class="mb-types">' +
+        '<div class="mb-type ' + (guide ? 'sel' : '') + '" data-type="guide"><i class="fas fa-id-card"></i><b>' + esc(t.type_guide) + '</b><small>' + esc(t.type_guide_sub) + '</small></div>' +
+        '<div class="mb-type ' + (!guide ? 'sel' : '') + '" data-type="taxi"><i class="fas fa-taxi"></i><b>' + esc(t.type_taxi) + '</b><small>' + esc(t.type_taxi_sub) + '</small></div></div>' +
+        sec('fa-user', t.sec_personal) +
+        '<div class="mb-row">' + field(t.fname, 'firstName', t.fname_ph, { ac: 'given-name' }) + field(t.lname, 'lastName', t.lname_ph, { ac: 'family-name' }) + '</div>' +
+        '<div class="mb-row">' + field(guide ? t.guide_no : t.plate, 'idNo', guide ? t.guide_no_ph : t.plate_ph) + field(t.phone, 'phone', t.phone_ph, { type: 'tel', mode: 'tel', ac: 'tel' }) + '</div>' +
+        field(t.email, 'email', t.email_ph, { type: 'email', ac: 'email' }) +
+        sec('fa-shield-halved', t.sec_pw) +
+        '<div class="mb-row">' +
+        '<div class="form-group"><label>' + esc(t.password) + ' <span class="req">*</span></label><div class="mb-pw"><input type="password" data-k="pw" value="' + esc(reg.pw || '') + '" placeholder="' + esc(t.pw_ph) + '" autocomplete="new-password"><button type="button" id="mbEye" aria-label="show"><i class="far fa-eye"></i></button></div></div>' +
+        '<div class="form-group"><label>' + esc(t.pw2) + ' <span class="req">*</span></label><input type="password" data-k="pw2" value="' + esc(reg.pw2 || '') + '" placeholder="' + esc(t.pw2_ph) + '" autocomplete="new-password"></div></div>' +
+        sec('fa-camera', guide ? t.sec_photo_guide : t.sec_photo_taxi) +
+        (reg.cardImg
+          ? '<div class="mb-photo"><img src="' + reg.cardImg + '" alt=""><div><button type="button" class="btn btn-danger" id="mbPhotoDel"><i class="fas fa-trash"></i> ' + esc(t.photo_remove) + '</button></div></div>'
+          : '<div class="mb-drop" id="mbDrop"><i class="fas fa-cloud-upload-alt"></i><div><b>' + esc(t.photo_click) + '</b>' + esc(t.photo_or) + '</div><small>' + esc(t.photo_hint) + '</small></div>') +
+        '<input type="file" id="mbFile" accept="image/*" style="display:none">' +
+        sec('fa-building-columns', t.sec_bank) +
+        '<div class="mb-row"><div class="form-group"><label>' + esc(t.bank) + ' <span class="req">*</span></label><select data-k="bank"><option value="">' + esc(t.bank_sel) + '</option>' +
+        BANKS.map(b => '<option value="' + esc(b) + '"' + (reg.bank === b ? ' selected' : '') + '>' + esc(b) + '</option>').join('') + '</select></div>' +
+        field(t.bank_no, 'bankNo', 'XXX-X-XXXXX-X', { mode: 'numeric' }) + '</div>' +
+        sec('fa-clipboard-list', t.sec_sales) +
+        '<div class="form-group"><label>Sales Register <span class="req">*</span></label><textarea data-k="sales" placeholder="' + esc(t.sales_ph) + '">' + esc(reg.sales || '') + '</textarea></div>' +
+        '<div class="mb-msg" id="regMsg"></div>' +
+        '<button class="btn mb-submit" type="submit"><i class="fas fa-user-plus"></i> ' + esc(t.submit_reg) + '</button></form></div>';
+    }
+    el.innerHTML = hero(t.nav_member) + '<div class="mb-wrap">' + tabs + body + '</div>';
+  }
+
+  async function handleFile(f) {
+    if (!f || !/^image\//.test(f.type)) { setMsg('regMsg', L().e_img, 'err'); return; }
+    try { reg.cardImg = await resizeImage(f); renderAuth(); } catch (e) { setMsg('regMsg', L().e_img, 'err'); }
+  }
+
+  function submitReg() {
+    const t = L(), r = reg;
+    const val = k => String(r[k] == null ? '' : r[k]).trim();
+    const fail = m => setMsg('regMsg', m, 'err');
+    if (!['firstName', 'lastName', 'idNo', 'phone', 'email', 'bank', 'bankNo', 'sales'].every(k => val(k)) || !r.pw || !r.pw2) return fail(t.e_req);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email'))) return fail(t.e_email);
+    if (r.pw.length < 6) return fail(t.e_pw);
+    if (r.pw !== r.pw2) return fail(t.e_pw2);
+    if (val('phone').replace(/\D/g, '').length < 9) return fail(t.e_phone);
+    if (!/^\d{10,15}$/.test(val('bankNo').replace(/[\s-]/g, ''))) return fail(t.e_bankno);
+    const email = val('email').toLowerCase();
+    if (members().some(m => m.email === email)) return fail(t.e_dup);
+    setMsg('regMsg', '');
+    askTerms(async () => {
+      const list = members();
+      if (list.some(m => m.email === email)) return fail(t.e_dup);
+      const salt = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      const m = {
+        id: uid(), type: r.type === 'taxi' ? 'taxi' : 'guide',
+        firstName: val('firstName'), lastName: val('lastName'), idNo: val('idNo'), phone: val('phone'), email,
+        salt, pwHash: await hashPw(r.pw, salt), cardImg: r.cardImg || '',
+        bank: val('bank'), bankNo: val('bankNo').replace(/[\s-]/g, ''), sales: val('sales'), createdAt: Date.now()
+      };
+      list.push(m);
+      if (!save(K.m, list)) return fail(t.e_save);
+      try { localStorage.setItem(K.s, m.id); } catch (e) {}
+      reg = { type: 'guide' };
+      finishAuth();
+    });
+  }
+
+  async function doLogin() {
+    const t = L();
+    const email = ($('lgEmail').value || '').trim().toLowerCase(), pw = $('lgPw').value || '';
+    const m = members().find(x => x.email === email);
+    if (!m || !pw || (await hashPw(pw, m.salt)) !== m.pwHash) return setMsg('lgMsg', t.e_login, 'err');
+    try { localStorage.setItem(K.s, m.id); } catch (e) {}
+    finishAuth();
+  }
+  function finishAuth() {
+    refreshNav();
+    const to = afterAuth || 'profile'; afterAuth = null;
+    goSection(to);
+  }
+
+  const secM = $('member');
+  const onField = e => { const k = e.target.dataset && e.target.dataset.k; if (k) reg[k] = e.target.value; };
+  secM.addEventListener('input', onField);
+  secM.addEventListener('change', e => { onField(e); if (e.target.id === 'mbFile') handleFile(e.target.files[0]); });
+  secM.addEventListener('click', e => {
+    const tab = e.target.closest('[data-tab]'); if (tab) { authTab = tab.dataset.tab; renderAuth(); return; }
+    const ty = e.target.closest('[data-type]'); if (ty) { reg.type = ty.dataset.type; renderAuth(); return; }
+    if (e.target.closest('#mbEye')) {
+      secM.querySelectorAll('input[data-k="pw"],input[data-k="pw2"]').forEach(i => { i.type = i.type === 'password' ? 'text' : 'password'; });
+      return;
+    }
+    if (e.target.closest('#mbDrop')) { $('mbFile').click(); return; }
+    if (e.target.closest('#mbPhotoDel')) { reg.cardImg = ''; renderAuth(); }
+  });
+  secM.addEventListener('dragover', e => { const d = e.target.closest('#mbDrop'); if (d) { e.preventDefault(); d.classList.add('over'); } });
+  secM.addEventListener('dragleave', e => { const d = e.target.closest('#mbDrop'); if (d) d.classList.remove('over'); });
+  secM.addEventListener('drop', e => { if (e.target.closest('#mbDrop')) { e.preventDefault(); handleFile(e.dataTransfer.files[0]); } });
+  secM.addEventListener('submit', e => {
+    e.preventDefault();
+    if (e.target.id === 'loginForm') doLogin(); else if (e.target.id === 'regForm') submitReg();
+  });
+
+  /* ---------- โปรไฟล์ ---------- */
+  function renderProfile() {
+    const m = cur(), t = L(), el = $('profile');
+    if (!m) { el.innerHTML = ''; return; }
+    const n = bookings().filter(b => b.memberId === m.id).length;
+    const guide = m.type === 'guide';
+    const mask = s => '••••' + String(s).slice(-4);
+    const date = new Date(m.createdAt).toLocaleDateString(currentLang, { year: 'numeric', month: 'long', day: 'numeric' });
+    let body;
+    if (!profEdit) {
+      body = '<dl class="mb-info">' +
+        '<dt>' + esc(t.p_type) + '</dt><dd><span class="mb-badge">' + esc(guide ? t.type_guide : t.type_taxi) + '</span></dd>' +
+        '<dt>' + esc(t.p_name) + '</dt><dd>' + esc(m.firstName + ' ' + m.lastName) + '</dd>' +
+        '<dt>' + esc(guide ? t.guide_no : t.plate) + '</dt><dd>' + esc(m.idNo) + '</dd>' +
+        '<dt>' + esc(t.phone) + '</dt><dd>' + esc(m.phone) + '</dd>' +
+        '<dt>' + esc(t.email) + '</dt><dd>' + esc(m.email) + '</dd>' +
+        '<dt>' + esc(t.bank) + '</dt><dd>' + esc(m.bank) + ' ' + esc(mask(m.bankNo)) + '</dd>' +
+        '<dt>Sales Register</dt><dd>' + esc(m.sales) + '</dd>' +
+        '<dt>' + esc(t.p_since) + '</dt><dd>' + esc(date) + '</dd>' +
+        '<dt>' + esc(t.p_bookings) + '</dt><dd>' + n + '</dd></dl>' +
+        (m.cardImg ? '<div class="mb-photo"><img src="' + m.cardImg + '" alt=""></div>' : '') +
+        '<div class="mb-msg" id="pfMsg"></div>' +
+        '<div class="mb-actions">' +
+        '<button class="btn" data-act="book"><i class="fas fa-calendar-check"></i> ' + esc(t.go_book) + '</button>' +
+        '<button class="btn btn-secondary" data-act="mine"><i class="fas fa-images"></i> ' + esc(t.my_bk) + '</button>' +
+        '<button class="btn btn-success" data-act="edit"><i class="fas fa-pen"></i> ' + esc(t.edit) + '</button>' +
+        '<button class="btn btn-danger" data-act="logout"><i class="fas fa-sign-out-alt"></i> ' + esc(t.logout) + '</button></div>';
+    } else {
+      const f = (label, id, v, o) => '<div class="form-group"><label>' + esc(label) + '</label><input id="' + id + '" value="' + esc(v) + '"' + ((o && o.ro) ? ' readonly' : '') + '></div>';
+      body = '<div class="mb-row">' + f(t.fname, 'pfFn', m.firstName) + f(t.lname, 'pfLn', m.lastName) + '</div>' +
+        '<div class="mb-row">' + f(t.phone, 'pfPhone', m.phone) + f(t.email, 'pfEmail', m.email, { ro: true }) + '</div>' +
+        '<div class="mb-row"><div class="form-group"><label>' + esc(t.bank) + '</label><select id="pfBank">' +
+        BANKS.map(b => '<option value="' + esc(b) + '"' + (m.bank === b ? ' selected' : '') + '>' + esc(b) + '</option>').join('') + '</select></div>' + f(t.bank_no, 'pfBankNo', m.bankNo) + '</div>' +
+        '<div class="form-group"><label>Sales Register</label><textarea id="pfSales">' + esc(m.sales) + '</textarea></div>' +
+        '<div class="mb-msg" id="pfMsg"></div>' +
+        '<div class="mb-actions"><button class="btn btn-success" data-act="save"><i class="fas fa-save"></i> ' + esc(t.save) + '</button>' +
+        '<button class="btn btn-secondary" data-act="cancel">' + esc(t.cancel) + '</button></div>';
+    }
+    el.innerHTML = hero(t.profile_title) + '<div class="mb-wrap"><div class="mb-card"><div class="mb-head"><h2><i class="fas fa-user-circle"></i> ' + esc(m.firstName + ' ' + m.lastName) + '</h2><p>' + esc(m.email) + '</p></div><div class="mb-body">' + body + '</div></div></div>';
+  }
+  $('profile').addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const a = b.dataset.act, t = L();
+    if (a === 'edit') { profEdit = true; renderProfile(); }
+    else if (a === 'cancel') { profEdit = false; renderProfile(); }
+    else if (a === 'logout') { try { localStorage.removeItem(K.s); } catch (x) {} profEdit = false; refreshNav(); goSection('member'); }
+    else if (a === 'book') { bkTab = 'new'; goSection('booking'); }
+    else if (a === 'mine') { bkTab = 'mine'; goSection('booking'); }
+    else if (a === 'save') {
+      const list = members(), m = list.find(x => x.id === sessionId());
+      if (!m) return;
+      const v = id => ($(id).value || '').trim();
+      if (!v('pfFn') || !v('pfLn') || !v('pfPhone') || !v('pfBankNo') || !v('pfSales')) return setMsg('pfMsg', t.e_req, 'err');
+      if (v('pfPhone').replace(/\D/g, '').length < 9) return setMsg('pfMsg', t.e_phone, 'err');
+      if (!/^\d{10,15}$/.test(v('pfBankNo').replace(/[\s-]/g, ''))) return setMsg('pfMsg', t.e_bankno, 'err');
+      Object.assign(m, { firstName: v('pfFn'), lastName: v('pfLn'), phone: v('pfPhone'), bank: $('pfBank').value, bankNo: v('pfBankNo').replace(/[\s-]/g, ''), sales: v('pfSales') });
+      if (!save(K.m, list)) return setMsg('pfMsg', t.e_save, 'err');
+      profEdit = false; renderProfile(); setMsg('pfMsg', t.saved_ok, 'ok');
+    }
+  });
+
+  /* ---------- จอง / บุ๊คกิ้ง ---------- */
+  const isExcluded = (a) => a && EXCL_ICONS.indexOf(a.icon) !== -1;
+  const comboN = () => bk.pkg === 'single' ? 0 : parseInt(bk.pkg, 10);
+  function calcTotal() {
+    const a = +bk.adults || 0, c = +bk.children || 0;
+    if (bk.pkg === 'single') {
+      const atts = getAttractions(currentLang);
+      return bk.rides.reduce((s, i) => s + ((atts[i] && atts[i].price) || 0), 0) * (a + c);
+    }
+    const p = COMBO[bk.pkg]; return a * p[0] + c * p[1];
+  }
+  const baht = () => TR().baht || 'Baht';
+  function pkgLabel(key) {
+    const t = L(), tr = TR();
+    return key === 'single' ? t.bk_single : (tr['pkg_combo' + key + '_name'] || ('COMBO ' + key));
+  }
+
+  function renderBooking() {
+    const t = L(), el = $('booking'), m = cur();
+    if (!m) {
+      el.innerHTML = hero(t.bk_title) + '<div class="mb-wrap"><div class="mb-card"><div class="mb-body" style="text-align:center"><p style="margin-bottom:10px">' + esc(t.bk_need_login) + '</p>' +
+        '<button class="btn" data-act="login"><i class="fas fa-sign-in-alt"></i> ' + esc(t.tab_login) + '</button> ' +
+        '<button class="btn btn-secondary" data-act="register"><i class="fas fa-user-plus"></i> ' + esc(t.tab_register) + '</button></div></div></div>';
+      return;
+    }
+    const tabs = '<div class="tabs" style="justify-content:center">' +
+      '<button class="tab ' + (bkTab === 'new' ? 'active' : '') + '" data-bktab="new">' + esc(t.bk_new) + '</button>' +
+      '<button class="tab ' + (bkTab === 'mine' ? 'active' : '') + '" data-bktab="mine">' + esc(t.bk_mine) + '</button></div>';
+    el.innerHTML = hero(t.bk_title) + '<div class="mb-wrap">' + tabs + (bkTab === 'new' ? bookingForm() : bookingList(m)) + '</div>';
+    if (bkTab === 'new') syncRides();
+  }
+
+  function bookingForm() {
+    const t = L(), tr = TR(), atts = getAttractions(currentLang), n = comboN();
+    const pkgOpts = [['single', t.bk_single], ['3', tr.pkg_combo3_name], ['5', tr.pkg_combo5_name], ['7', tr.pkg_combo7_name]]
+      .map(o => '<option value="' + o[0] + '"' + (bk.pkg === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>').join('');
+    const rides = atts.map((a, i) => {
+      const off = n && isExcluded(a);
+      return '<label class="mb-ride' + (off ? ' off' : '') + '" data-ride-row="' + i + '"><input type="checkbox" data-ride="' + i + '"' + (off ? ' disabled' : '') + (bk.rides.indexOf(i) !== -1 ? ' checked' : '') + '>' +
+        (a.logo ? '<img src="' + esc(a.logo) + '" alt="">' : '') + '<span>' + esc(a.title) + '</span>' +
+        (!n && a.price !== undefined ? '<b>' + a.price.toLocaleString() + ' ' + esc(baht()) + '</b>' : '') + '</label>';
+    }).join('');
+    const num = (label, k) => '<div class="form-group"><label>' + esc(label) + '</label><input type="number" min="0" max="50" inputmode="numeric" data-bk="' + k + '" value="' + esc(bk[k]) + '"></div>';
+    return '<div class="mb-card"><div class="mb-head"><h2><i class="fas fa-calendar-check"></i> ' + esc(t.bk_new) + '</h2></div><div class="mb-body">' +
+      '<div class="mb-row"><div class="form-group"><label>' + esc(t.bk_pkg) + '</label><select id="bkPkg">' + pkgOpts + '</select></div>' +
+      '<div class="form-group"><label>' + esc(t.bk_date) + ' <span class="req">*</span></label><input type="date" data-bk="date" min="' + today() + '" value="' + esc(bk.date) + '"></div></div>' +
+      '<div class="mb-row" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">' + num(t.bk_adult, 'adults') + num(t.bk_child, 'children') + num(t.bk_infant, 'infants') + '</div>' +
+      '<div class="mb-sec"><i class="fas fa-ticket-alt"></i> ' + esc(t.bk_rides) + ' <span id="bkCount" style="margin-left:auto;font-weight:400"></span></div>' +
+      rides +
+      '<div class="form-group" style="margin-top:14px"><label>' + esc(t.bk_notes) + '</label><textarea data-bk="notes">' + esc(bk.notes) + '</textarea></div>' +
+      '<div class="mb-total"><span>' + esc(t.bk_total) + '</span><span id="bkTotal"></span></div>' +
+      (n ? '' : '<div class="mb-hint">' + esc(t.bk_note_est) + '</div>') +
+      '<div class="mb-msg" id="bkMsg"></div>' +
+      '<button class="btn mb-submit" id="bkConfirm"><i class="fas fa-check-circle"></i> ' + esc(t.bk_confirm) + '</button></div></div>';
+  }
+
+  function syncRides() {
+    const t = L(), n = comboN(), full = n && bk.rides.length >= n;
+    $('booking').querySelectorAll('[data-ride]').forEach(cb => {
+      const i = +cb.dataset.ride, row = cb.closest('.mb-ride');
+      const excl = n && isExcluded(getAttractions(currentLang)[i]);
+      cb.disabled = !!(excl || (full && !cb.checked));
+      row.classList.toggle('on', cb.checked);
+      row.classList.toggle('off', cb.disabled);
+    });
+    const cnt = $('bkCount'); if (cnt) cnt.textContent = n ? tpl(t.bk_pick, { c: bk.rides.length, n: n }) : tpl(t.bk_picked, { c: bk.rides.length });
+    updateTotal();
+  }
+  function updateTotal() { const el = $('bkTotal'); if (el) el.textContent = calcTotal().toLocaleString() + ' ' + baht(); }
+
+  function bookingList(m) {
+    const t = L(), atts = getAttractions(currentLang);
+    const mine = bookings().filter(b => b.memberId === m.id).sort((a, b) => b.createdAt - a.createdAt);
+    const msg = flash ? '<div class="mb-msg ok">' + esc(flash) + '</div>' : '';
+    flash = '';
+    if (!mine.length) return msg + '<div class="mb-card"><div class="mb-body" style="text-align:center;color:#888">' + esc(t.bk_empty) + '</div></div>';
+    return msg + mine.map(b => {
+      const guests = [b.adults ? b.adults + ' ' + t.adult_s : '', b.children ? b.children + ' ' + t.child_s : '', b.infants ? b.infants + ' ' + t.infant_s : ''].filter(Boolean).join(', ');
+      return '<div class="mb-ticket"><div class="mb-ticket-top"><div><small style="color:#888">' + esc(t.bk_code) + '</small><div class="mb-code">' + esc(b.code) + '</div></div>' +
+        '<span class="mb-badge">' + esc(fmtDate(b.date)) + '</span></div>' +
+        '<div><b>' + esc(pkgLabel(b.pkg)) + '</b> · ' + esc(t.bk_guests) + ': ' + esc(guests) + '</div>' +
+        '<div class="mb-chips">' + b.rides.map(i => '<span>' + esc((atts[i] && atts[i].title) || '#' + (i + 1)) + '</span>').join('') + '</div>' +
+        '<div><b>' + esc(t.bk_total) + ':</b> ' + b.total.toLocaleString() + ' ' + esc(baht()) + '</div>' +
+        '<button class="btn btn-secondary" data-save="' + esc(b.code) + '"><i class="fas fa-image"></i> ' + esc(t.bk_save_img) + '</button></div>';
+    }).join('');
+  }
+
+  const genCode = () => {
+    const d = new Date(), p = n => String(n).padStart(2, '0'), ch = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let r = ''; for (let i = 0; i < 4; i++) r += ch[Math.floor(Math.random() * ch.length)];
+    return 'RP' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + r;
+  };
+
+  function confirmBooking() {
+    const t = L(), n = comboN(), fail = m => setMsg('bkMsg', m, 'err');
+    if (!bk.date || bk.date < today()) return fail(t.e_date);
+    if ((+bk.adults || 0) + (+bk.children || 0) < 1) return fail(t.e_guests);
+    if (!bk.rides.length) return fail(t.e_rides_0);
+    if (n && bk.rides.length !== n) return fail(tpl(t.e_rides_n, { n: n }));
+    setMsg('bkMsg', '');
+    askTerms(() => {
+      const m = cur(); if (!m) return;
+      const b = {
+        id: uid(), code: genCode(), memberId: m.id, pkg: bk.pkg, date: bk.date,
+        adults: +bk.adults || 0, children: +bk.children || 0, infants: +bk.infants || 0,
+        rides: bk.rides.slice().sort((a, c) => a - c), notes: (bk.notes || '').trim(), total: calcTotal(), createdAt: Date.now()
+      };
+      const all = bookings(); all.push(b);
+      if (!save(K.b, all)) return fail(t.e_save);
+      bk = bkInit(); bkTab = 'mine'; flash = tpl(t.bk_ok, { code: b.code });
+      renderBooking(); showTicket(b.code);
+    });
+  }
+
+  const secB = $('booking');
+  secB.addEventListener('click', e => {
+    const a = e.target.closest('[data-act]');
+    if (a) { authTab = a.dataset.act === 'register' ? 'register' : 'login'; afterAuth = 'booking'; goSection('member'); return; }
+    const tb = e.target.closest('[data-bktab]'); if (tb) { bkTab = tb.dataset.bktab; renderBooking(); return; }
+    const sv = e.target.closest('[data-save]'); if (sv) { showTicket(sv.dataset.save); return; }
+    if (e.target.closest('#bkConfirm')) confirmBooking();
+  });
+  secB.addEventListener('change', e => {
+    if (e.target.id === 'bkPkg') {
+      bk.pkg = e.target.value;
+      const n = comboN(), atts = getAttractions(currentLang);
+      if (n) bk.rides = bk.rides.filter(i => !isExcluded(atts[i])).slice(0, n);
+      renderBooking(); return;
+    }
+    if (e.target.dataset.ride !== undefined) {
+      const i = +e.target.dataset.ride, n = comboN();
+      if (e.target.checked) {
+        if (n && bk.rides.length >= n) { e.target.checked = false; return; }
+        if (bk.rides.indexOf(i) === -1) bk.rides.push(i);
+      } else bk.rides = bk.rides.filter(x => x !== i);
+      syncRides();
+    }
+  });
+  secB.addEventListener('input', e => {
+    const k = e.target.dataset && e.target.dataset.bk; if (!k) return;
+    bk[k] = e.target.value;
+    if (k === 'adults' || k === 'children') updateTotal();
+  });
+
+  /* ---------- สร้างรูปบุ๊คกิ้ง (PNG) ---------- */
+  const imgOv = document.createElement('div');
+  imgOv.className = 'modal-overlay';
+  imgOv.innerHTML = '<div class="modal-box mb-img-box"><button class="modal-close" id="mbImgX" aria-label="Close"><i class="fas fa-times"></i></button>' +
+    '<img id="mbImgPrev" alt="booking"><p class="mb-hint" id="mbImgHint"></p>' +
+    '<div class="mb-actions"><button class="btn btn-success" id="mbImgDl"><i class="fas fa-download"></i> <span></span></button>' +
+    '<button class="btn btn-secondary" id="mbImgShare" style="display:none"><i class="fas fa-share-alt"></i> <span></span></button></div></div>';
+  document.body.appendChild(imgOv);
+  let lastBlob = null, lastName = '', lastUrl = '';
+  function closeImg() { imgOv.classList.remove('show'); if (lastUrl) { URL.revokeObjectURL(lastUrl); lastUrl = ''; } unlockIfNone(); }
+  $('mbImgX').onclick = closeImg;
+  imgOv.addEventListener('click', e => { if (e.target === imgOv) closeImg(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeImg(); closeTerms(); } });
+  $('mbImgDl').onclick = () => {
+    if (!lastBlob) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(lastBlob); a.download = lastName; a.target = '_self';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  };
+  $('mbImgShare').onclick = () => {
+    if (!lastBlob) return;
+    const f = new File([lastBlob], lastName, { type: 'image/png' });
+    navigator.share({ files: [f], title: lastName }).catch(() => {});
+  };
+
+  function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function paint(ctx, H, go, b, m) {
+    const t = L(), atts = getAttractions(currentLang);
+    const F = '"Segoe UI",Tahoma,"Noto Sans Thai","Noto Sans",sans-serif';
+    const W = 900, X = 72, R = W - 72;
+    const set = (sz, col, w, al) => { ctx.font = (w || 'normal') + ' ' + sz + 'px ' + F; ctx.fillStyle = col; ctx.textAlign = al || 'left'; ctx.textBaseline = 'alphabetic'; };
+    const wrapSeg = (text, maxW) => {
+      const sep = /\s/.test(text) ? ' ' : '';
+      const parts = sep ? text.split(' ') : Array.from(text);
+      const lines = []; let line = '';
+      parts.forEach(p => { const test = line ? line + sep + p : p; if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = p; } else line = test; });
+      lines.push(line); return lines;
+    };
+    const wrap = (text, maxW) => String(text).split('\n').reduce((a, s) => a.concat(wrapSeg(s, maxW)), []);
+    const dash = y => { if (!go) return; ctx.save(); ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2; ctx.setLineDash([10, 8]); ctx.beginPath(); ctx.moveTo(X, y); ctx.lineTo(R, y); ctx.stroke(); ctx.restore(); };
+    const put = (lines, x, y, lh) => { if (go) lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh)); return y + lines.length * lh; };
+
+    if (go) {
+      const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#1a1a2e'); g.addColorStop(1, '#16213e');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#fff'; rr(ctx, 24, 24, W - 48, H - 48, 28); ctx.fill();
+      ctx.save(); rr(ctx, 24, 24, W - 48, H - 48, 28); ctx.clip(); ctx.fillStyle = '#e94560'; ctx.fillRect(24, 24, W - 48, 150); ctx.restore();
+      set(36, '#fff', 'bold', 'center'); ctx.fillText("Ripley's Believe It or Not! Pattaya", W / 2, 92);
+      set(26, '#ffd700', 'bold', 'center'); ctx.fillText('BOOKING', W / 2, 138);
+      set(22, '#888', 'normal', 'center'); ctx.fillText(t.bk_code, W / 2, 226);
+      set(60, '#1a1a2e', 'bold', 'center'); ctx.fillText(b.code, W / 2, 296);
+    }
+    dash(336);
+    const guests = [b.adults ? b.adults + ' ' + t.adult_s : '', b.children ? b.children + ' ' + t.child_s : '', b.infants ? b.infants + ' ' + t.infant_s : ''].filter(Boolean).join(', ');
+    const rows = [
+      [t.p_name, m.firstName + ' ' + m.lastName], [t.phone, m.phone], [t.bk_date, fmtDate(b.date)],
+      [t.bk_pkg, pkgLabel(b.pkg)], [t.bk_guests, guests], [t.bk_total, b.total.toLocaleString() + ' ' + baht()]
+    ];
+    let y = 388;
+    rows.forEach(r => {
+      set(26, '#1a1a2e', 'bold'); const lines = wrap(r[1], R - 330);
+      if (go) { set(22, '#888', 'normal'); ctx.fillText(r[0], X, y); set(26, '#1a1a2e', 'bold'); }
+      y = put(lines, 330, y, 34) + 16 - 0;
+    });
+    y += 6; dash(y); y += 52;
+    set(26, '#1a1a2e', 'bold'); if (go) ctx.fillText(t.bk_rides, X, y); y += 42;
+    b.rides.forEach(i => {
+      set(24, '#333', 'normal'); const nm = (atts[i] && atts[i].title) || '#' + (i + 1); const lines = wrap(nm, R - X - 30);
+      if (go) { ctx.fillStyle = '#e94560'; ctx.beginPath(); ctx.arc(X + 8, y - 8, 6, 0, Math.PI * 2); ctx.fill(); set(24, '#333', 'normal'); }
+      y = put(lines, X + 30, y, 32) + 8;
+    });
+    if (b.notes) {
+      y += 10; set(20, '#888', 'normal'); if (go) ctx.fillText(t.bk_notes, X, y); y += 32;
+      set(22, '#555', 'normal'); y = put(wrap(b.notes, R - X), X, y, 30);
+    }
+    y += 24; dash(y); y += 48;
+    set(22, '#555', 'normal', 'center'); y = put(wrap(t.bk_show, W - 160), W / 2, y, 30);
+    set(18, '#aaa', 'normal', 'center'); if (go) ctx.fillText(new Date(b.createdAt).toLocaleString(currentLang), W / 2, y + 12);
+    return y + 12 + 70;
+  }
+
+  function showTicket(code) {
+    const m = cur(), b = bookings().find(x => x.code === code && m && x.memberId === m.id);
+    if (!b) return;
+    const t = L();
+    const probe = document.createElement('canvas').getContext('2d');
+    const H = Math.ceil(paint(probe, 0, false, b, m));
+    const c = document.createElement('canvas'); c.width = 900; c.height = H;
+    paint(c.getContext('2d'), H, true, b, m);
+    c.toBlob(blob => {
+      if (!blob) return;
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastBlob = blob; lastName = 'ripleys-booking-' + b.code + '.png'; lastUrl = URL.createObjectURL(blob);
+      $('mbImgPrev').src = lastUrl;
+      $('mbImgHint').textContent = t.bk_hold;
+      $('mbImgDl').querySelector('span').textContent = t.bk_dl;
+      const sh = $('mbImgShare'); sh.querySelector('span').textContent = t.bk_share;
+      let canShare = false;
+      try { canShare = !!(navigator.canShare && navigator.canShare({ files: [new File([blob], lastName, { type: 'image/png' })] })); } catch (e) {}
+      sh.style.display = canShare ? 'inline-flex' : 'none';
+      imgOv.classList.add('show'); document.body.style.overflow = 'hidden';
+    }, 'image/png');
+  }
+
+  /* ---------- ผูกกับระบบเดิม ---------- */
+  const _lang = window.changeLang;
+  window.changeLang = function (l) {
+    _lang(l);
+    refreshNav();
+    ['member', 'profile', 'booking'].forEach(id => { if ($(id).classList.contains('active')) renderSection(id); });
+  };
+  refreshNav();
+})();
+</script>
+<!-- ===== END MEMBER ADD-ON ===== -->
 </body>
 </html>
